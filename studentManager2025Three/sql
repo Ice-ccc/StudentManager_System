@@ -46,7 +46,6 @@ CREATE TABLE sc (
     sno INT NOT NULL,
     Cno INT NOT NULL,
     Cname VARCHAR(50) NOT NULL,
-    -- 设置联合主键（sno和Cno）
     PRIMARY KEY (sno, Cno)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
