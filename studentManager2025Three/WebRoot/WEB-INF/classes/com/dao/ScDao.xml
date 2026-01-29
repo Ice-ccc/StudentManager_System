@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace对应ScDao接口的全类名 -->
+<mapper namespace="com.dao.ScDao">
+
+    <!-- 1. 学生选课：新增sc记录（仅插入sno、Cno、Cname，适配你的sc表） -->
+    <insert id="addSc" parameterType="com.pojo.Sc">
+        INSERT INTO sc (sno, Cno, Cname)
+        VALUES (#{sno}, #{cno}, #{cname})
+    </insert>
+
+    <!-- 2. 学生退课：删除sc记录 -->
+    <delete id="deleteSc">
+        DELETE FROM sc
+        WHERE sno = #{sno} AND Cno = #{cno}
+    </delete>
+
+    <!-- 3. 查看学生已选课程：关联course表查询课程信息 -->
+    <select id="getSelectedCoursesBySno" parameterType="int" resultType="com.pojo.Course">
+        SELECT c.Cno, c.Cname, c.Credit, c.Comment
+        FROM sc
+        LEFT JOIN course c ON sc.Cno = c.Cno
+        WHERE sc.sno = #{sno}
+    </select>
+
+    <!-- 4. 选课统计：查询所有选课记录数 -->
+    <select id="countAllSc" resultType="int">
+        SELECT COUNT(*) FROM sc
+    </select>
+    
+    <!-- 按学号统计选课数 -->
+    <select id="countScBySno" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM sc WHERE sno = #{sno}
+    </select>
+
+</mapper>

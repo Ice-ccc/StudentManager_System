@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.pojo.mapper.StudentMapper">
+    <!--根据客户编号获取客户信息 -->
+	<select id="findStudentBySno" parameterType="Integer" resultType="com.pojo.Student">
+		select * from stu where sno = #{sno}
+	</select>
+	
+	<select id="findStudentBySnoAndPwd" parameterType="Map" resultType="com.pojo.Student">
+		select * from stu where sno = #{sno} and pwd = #{pwd}
+	</select>
+	
+	<resultMap type="com.pojo.Student" id="resultMap">
+      <id property="sno" column="sno"/>
+      <result property="sname" column="sname"/>
+      <result property="pwd" column="pwd"/> 
+      <result property="age" column="age"/>
+      <result property="hobbit" column="hobbit"/>
+      <result property="address" column="address"/>   
+    </resultMap>
+	<select id="findAllStudents" resultMap="resultMap">
+		select * from stu
+	</select>
+	
+	
+	<select id="findStudentsByName" parameterType="String"  resultType="com.pojo.Student">
+		select * from stu where sname like '%${value}%'
+	</select>
+	
+	
+	
+	<select id="findAllStudentsByPageNo" parameterType="Map" resultType="com.pojo.Student">
+		select * from stu limit #{startPos},#{pageSize}
+	</select>
+	
+	<select id="countAllStudents"  resultType="Integer">
+		select count(*) from stu
+	</select>
+	
+	<select id="selectBySnameLike" resultType="com.pojo.Student">
+    SELECT * FROM student 
+    WHERE sname LIKE #{sname}
+    </select>
+	
+	
+	<!-- 添加客户信息
+	<insert id="addStudent" parameterType="com.pojo.Student">
+	    insert into student(sno,sname,pwd,age,address) values(#{sno},#{sname},#{pwd},#{age},#{address})
+	    
+	    <selectKey keyProperty="sno" resultType="Integer" order="BEFORE">
+	    select if(max(sno) is null, 1, max(sno) +1) as newSNO from student
+	    </selectKey>	 
+	    
+	</insert>
+	 -->
+	 
+	<insert id="addStudent" parameterType="com.pojo.Student">
+	           
+		
+		 insert into stu(sno,sname,pwd,age,hobbit,address) 
+		 values(#{sno},#{sname},#{pwd},#{age},#{hobbit},#{address})
+	</insert>
+	
+	
+	<!-- 更新客户信息 -->
+	<update id="updateStudent" parameterType="com.pojo.Student">
+	    update stu 
+	    set sname=#{sname},pwd=#{pwd},age=#{age},hobbit=#{hobbit},address=#{address}
+	    where sno=#{sno}
+	</update>
+	
+	<!-- 删除客户信息 -->
+	<delete id="deleteStudent" parameterType="Integer">
+	    delete from stu where sno=#{sno}
+	</delete>
+	
+	
+	<!--根据客户名模糊查询客户信息列表
+	<select id="findCustomerByName" parameterType="String"
+	    resultType="com.itheima.po.Customer">
+	     select * from t_customer where username like '%${value}%' 
+	    select * from t_customer where username like concat('%',#{value},'%')
+	</select>
+	-->
+</mapper>

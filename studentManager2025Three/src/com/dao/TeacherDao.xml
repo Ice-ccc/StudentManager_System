@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.TeacherDao">
+
+    <!-- 新增教师：Tno手动输入，无需自增 -->
+    <insert id="addTeacher" parameterType="com.pojo.Teacher">
+        INSERT INTO teacher (Tno, Tname, Tage, Cno)
+        VALUES (#{Tno}, #{Tname}, #{Tage}, #{Cno})
+    </insert>
+
+    <!-- 根据教师编号查询 -->
+    <select id="getTeacherByTno" parameterType="Integer" resultType="com.pojo.Teacher">
+        SELECT Tno, Tname, Tage, Cno
+        FROM teacher
+        WHERE Tno = #{Tno}
+    </select>
+
+    <!-- 查询所有教师 -->
+    <select id="getAllTeachers" resultType="com.pojo.Teacher">
+        SELECT Tno, Tname, Tage, Cno
+        FROM teacher
+    </select>
+
+    <!-- 修改教师信息 -->
+    <update id="updateTeacher" parameterType="com.pojo.Teacher">
+        UPDATE teacher
+        SET Tname = #{Tname},
+            Tage = #{Tage},
+            Cno = #{Cno}
+        WHERE Tno = #{Tno}
+    </update>
+
+    <!-- 根据教师编号删除 -->
+    <delete id="deleteTeacher" parameterType="Integer">
+        DELETE FROM teacher
+        WHERE Tno = #{Tno}
+    </delete>
+    
+    
+    <!-- 查询未分配课程的教师 -->
+	
+	<select id="selectTeachersByCnoNull" resultType="com.pojo.Teacher">
+    SELECT Tno, Tname, Tage, Cno FROM teacher WHERE Cno IS NULL
+	</select>
+
+	<!-- 更新教师的课程编号 -->
+	
+	<update id="updateTeacherCno" parameterType="map">
+    	UPDATE teacher SET Cno = #{Cno} WHERE Tno = #{Tno}
+	</update>
+
+</mapper>

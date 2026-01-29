@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须与Mapper接口全路径一致 -->
+<mapper namespace="com.dao.CourseDao">
+
+    <!-- 1. 新增课程 -->
+    <insert id="addCourse" parameterType="com.pojo.Course">
+        INSERT INTO course (Cno, Cname, Credit, Comment)
+        VALUES (#{Cno}, #{Cname}, #{Credit}, #{Comment})
+    </insert>
+
+    <!-- 2. 删除课程 -->
+    <delete id="deleteCourseByCno" parameterType="java.lang.Integer">
+        DELETE FROM course WHERE Cno = #{Cno}
+    </delete>
+
+    <!-- 3. 修改课程学分 -->
+    <update id="updateCourseCredit">
+        UPDATE course SET Credit = #{newCredit} WHERE Cno = #{Cno}
+    </update>
+
+    <!-- 4. 按编号查询课程 -->
+    <select id="getCourseByCno" parameterType="java.lang.Integer" resultType="com.pojo.Course">
+        SELECT Cno, Cname, Credit, Comment FROM course WHERE Cno = #{Cno}
+    </select>
+
+    <!-- 5. 查询所有课程 -->
+    <select id="getAllCourse" resultType="com.pojo.Course">
+        SELECT Cno, Cname, Credit, Comment FROM course
+    </select>
+    
+    <!-- 分页查询课程 -->
+    <select id="getCourseByPage" resultType="com.pojo.Course">
+        SELECT Cno, Cname, Credit, Comment 
+        FROM course 
+        LIMIT #{pageSize} OFFSET #{pageNo}
+    </select>
+
+    <!-- 统计课程总数 -->
+    <select id="countAllCourse" resultType="java.lang.Integer">
+       SELECT COUNT(*) FROM course
+    </select>
+
+</mapper>

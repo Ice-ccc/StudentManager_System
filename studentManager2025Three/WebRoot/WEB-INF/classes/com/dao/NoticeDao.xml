@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.NoticeDao">
+    <!-- 新增公告（手动输入ID） -->
+    <insert id="addNotice" parameterType="com.pojo.Notice">
+        INSERT INTO notice (Nid, Ntitle, Ncontent, Nauthor)
+        VALUES (#{Nid}, #{Ntitle}, #{Ncontent}, #{Nauthor})
+    </insert>
+
+    <!-- 删除公告 -->
+    <delete id="deleteNoticeByNid" parameterType="java.lang.Integer">
+        DELETE FROM notice WHERE Nid = #{Nid}
+    </delete>
+
+    <!-- 修改公告内容 -->
+    <update id="updateNoticeContent">
+        UPDATE notice 
+        SET Ntitle = #{newTitle}, Ncontent = #{newContent}
+        WHERE Nid = #{Nid}
+    </update>
+
+    <!-- 模糊查询（标题/内容包含关键词） -->
+    <select id="fuzzyQueryNotice" parameterType="java.lang.String" resultType="com.pojo.Notice">
+        SELECT Nid, Ntitle, Ncontent, Ntime, Nauthor 
+        FROM notice 
+        WHERE Ntitle LIKE CONCAT('%', #{keyword}, '%') 
+           OR Ncontent LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <!-- 查询所有公告 -->
+    <select id="getAllNotice" resultType="com.pojo.Notice">
+        SELECT Nid, Ntitle, Ncontent, Ntime, Nauthor FROM notice ORDER BY Ntime DESC
+    </select>
+
+    <!-- 根据ID查询公告 -->
+    <select id="getNoticeByNid" parameterType="java.lang.Integer" resultType="com.pojo.Notice">
+        SELECT Nid, Ntitle, Ncontent, Ntime, Nauthor FROM notice WHERE Nid = #{Nid}
+    </select>
+
+    <!-- 校验公告ID是否存在 -->
+    <select id="checkNoticeIdExists" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM notice WHERE Nid = #{Nid}
+    </select>
+</mapper>

@@ -1,0 +1,95 @@
+学生信息管理：
+CREATE DATABASE studentM;
+USE studentM;
+CREATE TABLE stu
+(
+    sno INT PRIMARY KEY,
+    sname VARCHAR(20) NOT NULL,
+    pwd CHAR(3) NOT NULL,
+    age INT,
+    hobbit VARCHAR(40),
+    address VARCHAR(30) NOT NULL
+);
+
+INSERT INTO stu VALUES
+(101, 'lili', '111', 25, '运动', '福建省福州市'),
+(102, 'tom', '222', 22, '看漫画', '福建省福州市'),
+(103, '小丽', '333', 21, '听歌', '福州市连江县'),
+(104, '小包', '444', 22, '打游戏', '连江县潘渡镇'),
+(105, '小小', '555', 23, '看小说', '福州市连江县'),
+(107, '玲玲', '777', 29, '看书', '福建省漳州市');
+
+SELECT * FROM stu;
+
+
+公告管理：
+数据库：
+-- 切换到 studentM 数据库
+USE studentM;
+
+-- 如果 notice 表存在则删除
+DROP TABLE IF EXISTS notice;
+
+-- 创建公告表（取消 Nid 自增，手动输入）
+CREATE TABLE notice (
+    Nid INT PRIMARY KEY,  -- 公告ID（手动输入，主键）
+    Ntitle VARCHAR(100) NOT NULL,  -- 公告标题（非空）
+    Ncontent TEXT NOT NULL,  -- 公告内容（非空）
+    Ntime DATETIME DEFAULT NOW(),  -- 发布时间（默认当前时间）
+    Nauthor VARCHAR(50) NOT NULL  -- 发布人（非空）
+);
+
+
+学生选课管理：
+-- 创建sc表
+CREATE TABLE sc (
+    sno INT NOT NULL,
+    Cno INT NOT NULL,
+    Cname VARCHAR(50) NOT NULL,
+    -- 设置联合主键（sno和Cno）
+    PRIMARY KEY (sno, Cno)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+教师信息管理：
+USE studentM;
+
+-- 创建教师表teacher
+CREATE TABLE teacher (
+    Tno INT PRIMARY KEY,       -- 教师编号（主键，手动输入，非自增，和课程表Cno保持一致风格）
+    Tname VARCHAR(20) NOT NULL,-- 教师姓名（非空，和学生表sname长度一致）
+    Tage INT,                  -- 教师年龄（允许为空，和学生表age类型一致）
+    Cno INT,                   -- 授课课程编号（关联课程表Cno）
+    -- 外键约束：确保授课的课程编号在课程表中存在
+    FOREIGN KEY (Cno) REFERENCES course(Cno) ON DELETE SET NULL
+);
+
+-- 插入测试数据（适配现有课程表的Cno，覆盖所有课程）
+INSERT INTO teacher (Tno, Tname, Tage, Cno) VALUES 
+    (1001, '张教授', 45, 1),    -- 张教授教高等数学（Cno=1）
+    (1002, '李老师', 38, 2),    -- 李老师教大学英语（Cno=2）
+    (1003, '王老师', 35, 3),    -- 王老师教Java程序设计（Cno=3）
+    (1004, '赵老师', 42, 4),    -- 赵老师教数据库原理（Cno=4）
+    (1005, '孙老师', 30, 5),    -- 孙老师教体育（Cno=5）
+    (1006, '周老师', 40, NULL); -- 周老师暂未分配课程（Cno为空）
+
+-- 查询教师表验证数据
+SELECT * FROM teacher;
+
+
+课程管理：
+USE studentM;
+CREATE TABLE course (
+    Cno INT PRIMARY KEY,       -- 课程编号（手动输入，非自增）
+    Cname VARCHAR(50) NOT NULL,-- 课程名称
+    Credit INT NOT NULL,       -- 课程学分
+    Comment VARCHAR(200)       -- 课程备注（可选）);
+
+INSERT INTO course (Cno, Cname, Credit, Comment) VALUES 
+    (1, '高等数学', 4, '公共必修课'),
+    (2, '大学英语（一）', 3, '公共基础课'),
+    (3, 'Java程序设计基础', 3, '专业基础课'),
+    (4, '数据库原理与应用', 4, '专业核心课'),
+    (5, '体育', 2, '通识体育课');
+
+SELECT * FROM course;
